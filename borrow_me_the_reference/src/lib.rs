@@ -7,16 +7,29 @@
 //     do_operations: which borrows a vector of string literals representing simple addition
 //      and subtraction equations. The function should replace the operation with the result.
 
-pub fn delete_and_backspace(e: &mut String) {
+pub fn delete_and_backspace(s: &mut String) {
     let mut result = String::new();
-    for c in e.chars() {
+    let mut delete_count = 0;
+    let mut backspace_count = 0;
+
+    for c in s.chars() {
         match c {
-            '-' => result.pop(),
-            '+' => result.truncate(result.len() - 1),
-            _ => result.push(c),
+            '+' => delete_count += 1,
+            '-' => backspace_count += 1,
+            _ => {
+                if delete_count > 0 {
+                    delete_count -= 1;
+                } else if backspace_count > 0 {
+                    backspace_count -= 1;
+                    result.pop();
+                } else {
+                    result.push(c);
+                }
+            }
         }
     }
-    *e = result;
+
+    *s = result;
 }
 
 pub fn do_operations(v: &mut [String]) {
