@@ -1,14 +1,41 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+#[derive(Debug, Eq, PartialEq, Clone)]
+
+pub struct Light {
+    pub alias: String,
+    pub brightness: u8,
 }
 
+impl Light {
+    pub fn new(alias: &str) -> Self {
+        Self {
+            alias: alias.to_string(),
+            brightness: 0,
+        }
+    }
+}
+
+pub fn change_brightness(lights: &mut [Light], alias: &str, value: u8) {
+    for light in lights.iter_mut() {
+        if light.alias == alias {
+            light.brightness = value;
+            break;
+        }
+    }
+}
+
+
 #[cfg(test)]
+
 mod tests {
     use super::*;
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+
+
+    let mut lights = ["living_room", "bedroom", "rest_room"].map(Light::new);
+    let result =  change_brightness(&mut lights, "living_room", 200);
+    //assert_eq!(result, Some(200));
+    assert_eq!(lights[0].brightness, 200);
     }
 }
