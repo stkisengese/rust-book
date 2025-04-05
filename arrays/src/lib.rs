@@ -1,5 +1,9 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+pub fn sum(a: &[i32]) -> i32 {
+    a.iter().sum()
+}
+
+pub fn thirtytwo_tens() -> [i32; 32] {
+    [10; 32]
 }
 
 #[cfg(test)]
@@ -7,8 +11,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_sum() {
+        let a = [1, 2, 3];
+        let result = sum(&a);
+        assert_eq!(result, 6);
+    }
+
+    #[test]
+    fn test_thirtytwo_tens() {
+        let result = thirtytwo_tens();
+        assert_eq!(result.len(), 32);
+        assert_eq!(result.iter().sum::<i32>(), 320);
     }
 }
