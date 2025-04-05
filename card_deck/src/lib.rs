@@ -80,7 +80,7 @@ pub struct Card {
     pub rank: Rank,
 }
 
-pub fn winner_card(card: &Card) -> bool {
+pub fn winner_card(card: Card) -> bool {
     card.rank == Rank::Ace && card.suit == Suit::Spade
 }
 
@@ -95,7 +95,7 @@ mod tests {
             suit: Suit::Spade,
         };
 
-        let result = winner_card(&your_card);
+        let result = winner_card(your_card);
         assert_eq!(result, true);
     }
 
@@ -105,7 +105,7 @@ mod tests {
             rank: Rank::Two, // Not Ace
             suit: Suit::Spade, // Not Club
         };
-        let result = winner_card(&your_card2);
+        let result = winner_card(your_card2);
         assert_eq!(result, false);
     }
 }
