@@ -1,5 +1,11 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+// use std::collections::HashMap;
+
+pub fn is_permutation(s1: &str, s2: &str) -> bool {
+    let mut v1: Vec<char> = s1.chars().collect();
+    let mut v2: Vec<char> = s2.chars().collect();
+    v1.sort();
+    v2.sort();
+    v1 == v2
 }
 
 #[cfg(test)]
@@ -7,8 +13,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_is_permutation() {
+        let result = is_permutation("hello", "olleh");
+        assert_eq!(result, true);
     }
 }
