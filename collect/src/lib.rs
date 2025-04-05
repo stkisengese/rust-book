@@ -1,5 +1,7 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+
+
+pub fn bubble_sort(arr: &mut [i32]) {
+    arr.sort();
 }
 
 #[cfg(test)]
@@ -7,8 +9,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_bubble_sort() {
+        let mut arr = [1, 2, 3, 4];
+        bubble_sort(&mut arr);
+        assert_eq!(arr, [1, 2, 3, 4]);
     }
 }
