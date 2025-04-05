@@ -12,7 +12,9 @@ pub fn edit_distance(source: &str, target: &str) -> usize {
     if s_head == t_head {
         edit_distance(s_tail, t_tail)
     } else {
-        1 + edit_distance(source, t_tail).min(edit_distance(s_tail, target)).min(edit_distance(s_tail, t_tail))
+        1 + edit_distance(source, t_tail) // insert t_head into source
+            .min(edit_distance(s_tail, target)) // delete s_head from source
+            .min(edit_distance(s_tail, t_tail)) // substitute s_head with t_head
     }
 }
 
