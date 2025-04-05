@@ -11,13 +11,22 @@ pub fn capitalize_first(input: &str) -> String {
 
 // title_case function which converts the 
 // first letter of each word in a string to uppercase.
-
 pub fn title_case(input: &str) -> String {
-    input
-        .split_whitespace()
-        .map(|word| capitalize_first(word))
-        .collect::<Vec<String>>()
-        .join(" ")
+    let mut result = String::with_capacity(input.len());
+    let mut capitalize_next = true;
+
+    for c in input.chars() {
+        if c.is_whitespace() {
+            result.push(c);
+            capitalize_next = true;
+        } else if capitalize_next {
+            result.extend(c.to_uppercase());
+            capitalize_next = false;
+        } else {
+            result.extend(c.to_lowercase());
+        }
+    }
+    result
 }
 
 // change_case function which converts all uppercase letters to lowercase and vice versa.
@@ -46,8 +55,8 @@ mod tests {
 
     #[test]
     fn test_title_case() {
-        let result = title_case("hello world");
-        assert_eq!(result, "Hello World");
+        let result = title_case("hello my\t\tname is carl");
+        assert_eq!(result, "Hello My\t\tName Is Carl");
     }
 
     #[test]
