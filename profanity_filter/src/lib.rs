@@ -19,8 +19,10 @@ impl Message {
 
 pub fn check_ms(message: &str) -> Result<&str, &str> {
     let msg = Message::new(message.to_string(), "user".to_string());
-    match msg.send_ms() {
-        Some(content) => Ok(content),
-        None => Err("ERROR: illegal"),
+    
+    if msg.content.is_empty() || msg.content.to_lowercase().contains("stupid") {
+        Err("ERROR: illegal")
+    } else {
+        Ok(message)
     }
 }
