@@ -11,6 +11,6 @@ pub fn open_or_create<P: AsRef<Path>>(path: &P, content: &str) {
                 .open(path)
                 .expect("Failed to open file");
 
-    writeln!(file, "{content}").expect("failed to write");
+    write!(file, "{content}").expect("failed to write");
 }
 
