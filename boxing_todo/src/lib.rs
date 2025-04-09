@@ -26,8 +26,12 @@ impl TodoList {
             .map_err(|e| Box::new(err::ParseErr::Malformed(Box::new(e))))?;
         
          // Validate JSON structure
-         if !parsed.has_key("title") || !parsed.has_key("tasks") {
-            return Err(Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))));
+        if !parsed.has_key("title") || !parsed["title"].is_string() || 
+           !parsed.has_key("tasks") || !parsed["tasks"].is_array() {
+            return Err(Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Invalid JSON structure",
+            )))));
         }
 
         // Extract title
