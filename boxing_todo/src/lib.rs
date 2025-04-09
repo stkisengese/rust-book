@@ -1,6 +1,6 @@
 mod err;
 
-use err::{ParseErr};
+pub use err::{ParseErr, ReadErr};
 pub use json::{object, JsonValue};
 use std::{error::Error, fs};
 
