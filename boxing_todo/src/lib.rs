@@ -20,75 +20,46 @@ pub struct TodoList {
 
 impl TodoList {
     pub fn get_todo(path: &str) -> Result<TodoList, Box<dyn Error>> {
-        let content = fs::read_to_string(path)
-            .map_err(|e| Box::new(err::ReadErr { child_err: Box::new(e) }))?;
+        // File handling with proper ReadErr
+        let mut file = File::open(path)
+            .map_err(|e| Box::new(ReadErr { child_err: Box::new(e) }))?;
 
-        let parsed = json::parse(&content)
-            .map_err(|e| Box::new(err::ParseErr::Malformed(Box::new(e))))?;
-        
-         // Validate JSON structure
-        if !parsed.has_key("title") || !parsed["title"].is_string() || 
-           !parsed.has_key("tasks") || !parsed["tasks"].is_array() {
-            return Err(Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
-                std::io::ErrorKind::InvalidData,
-                "Invalid JSON structure",
-            )))));
-        }
+        let mut content = String::new();
+        file.read_to_string(&mut content)
+            .map_err(|e| Box::new(ReadErr { child_err: Box::new(e) }))?;
 
-        // Extract title
-        let title = parsed["title"].as_str()
-            .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?
-            .to_string();
-
-        // Extract tasks
-        let tasks_json = &parsed["tasks"];
-        
-        // Check if tasks array is empty
-        if tasks_json.is_empty() {
+        // Early empty check
+        if content.trim().is_empty() {
             return Err(Box::new(ParseErr::Empty));
         }
 
-        // Parse tasks
-        let mut tasks = Vec::new();
-        for task in parsed["tasks"].members() {
-            if !task.has_key("id") || !task.has_key("description") || !task.has_key("level") {
-                return Err(Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
-                    std::io::ErrorKind::InvalidData,
-                    "Missing task fields",
-                )))));
-            }
+        // JSON parsing
+        let parsed = json::parse(&content)
+            .map_err(|e| Box::new(ParseErr::Malformed(Box::new(e))))?;
 
-            let id = task["id"].as_u32()
-                .ok_or_else(|| {
-                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
-                        std::io::ErrorKind::InvalidData,
-                        "Invalid task ID",
-                    ))))
-                })?;
+        // Title extraction
+        let title = parsed["title"].as_str()
+            .ok_or(Box::new(ParseErr::Empty))?
+            .to_string();
 
-            let description = task["description"].as_str()
-                .ok_or_else(|| {
-                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
-                        std::io::ErrorKind::InvalidData,
-                        "Invalid description",
-                    ))))
-                })?
-                .to_string();
+        // Tasks processing
+        let tasks = parsed["tasks"].members()
+            .map(|task| {
+                Ok(Task {
+                    id: task["id"].as_u32().ok_or(Box::new(ParseErr::Empty))?,
+                    description: task["description"].as_str()
+                        .ok_or(Box::new(ParseErr::Empty))?
+                        .to_string(),
+                    level: task["level"].as_u32().ok_or(Box::new(ParseErr::Empty))?,
+                })
+            })
+            .collect::<Result<Vec<_>, _>>()?;
 
-            let level = task["level"].as_u32()
-                .ok_or_else(|| {
-                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
-                        std::io::ErrorKind::InvalidData,
-                        "Invalid level",
-                    ))))
-                })?;
-
-            tasks.push(Task { id, description, level });
+        // Empty tasks check
+        if tasks.is_empty() {
+            return Err(Box::new(ParseErr::Empty));
         }
 
-        Ok(TodoList {
-            title,
-            tasks,
-        })
+        Ok(TodoList { title, tasks })
     }
 }
