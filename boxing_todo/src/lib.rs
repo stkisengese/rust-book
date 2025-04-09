@@ -50,21 +50,39 @@ impl TodoList {
         // Parse tasks
         let mut tasks = Vec::new();
         for task in parsed["tasks"].members() {
+            if !task.has_key("id") || !task.has_key("description") || !task.has_key("level") {
+                return Err(Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "Missing task fields",
+                )))));
+            }
+
             let id = task["id"].as_u32()
-                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?;
+                .ok_or_else(|| {
+                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "Invalid task ID",
+                    ))))
+                })?;
 
             let description = task["description"].as_str()
-                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?
+                .ok_or_else(|| {
+                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "Invalid description",
+                    ))))
+                })?
                 .to_string();
 
             let level = task["level"].as_u32()
-                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?;
+                .ok_or_else(|| {
+                    Box::new(err::ParseErr::Malformed(Box::new(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "Invalid level",
+                    ))))
+                })?;
 
-            tasks.push(Task {
-                id,
-                description,
-                level,
-            });
+            tasks.push(Task { id, description, level });
         }
 
         Ok(TodoList {
