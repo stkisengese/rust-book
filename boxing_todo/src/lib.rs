@@ -29,7 +29,7 @@ impl TodoList {
          if !parsed.has_key("title") || !parsed.has_key("tasks") {
             return Err(Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))));
         }
-        
+
         // Extract title
         let title = parsed["title"].as_str()
             .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?
@@ -45,11 +45,21 @@ impl TodoList {
 
         // Parse tasks
         let mut tasks = Vec::new();
-        for task in tasks_json.members() {
+        for task in parsed["tasks"].members() {
+            let id = task["id"].as_u32()
+                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?;
+
+            let description = task["description"].as_str()
+                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?
+                .to_string();
+
+            let level = task["level"].as_u32()
+                .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?;
+
             tasks.push(Task {
-                id: task["id"].as_u32().unwrap_or(0),
-                description: task["description"].as_str().unwrap_or("").to_string(),
-                level: task["level"].as_u32().unwrap_or(0),
+                id,
+                description,
+                level,
             });
         }
 
