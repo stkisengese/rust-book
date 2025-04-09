@@ -1,7 +1,7 @@
 mod err;
 
 use err::{ParseErr};
-// use json::JsonValue;
+pub use json::{object, JsonValue};
 use std::{error::Error, fs};
 
 #[derive(Debug, Eq, PartialEq)]
