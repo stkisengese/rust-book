@@ -25,8 +25,15 @@ impl TodoList {
         let parsed = json::parse(&content)
             .map_err(|e| Box::new(err::ParseErr::Malformed(Box::new(e))))?;
         
+         // Validate JSON structure
+         if !parsed.has_key("title") || !parsed.has_key("tasks") {
+            return Err(Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))));
+        }
+        
         // Extract title
-        let title = parsed["title"].as_str().unwrap_or("").to_string();
+        let title = parsed["title"].as_str()
+            .ok_or_else(|| Box::new(err::ParseErr::Malformed(Box::new(std::fmt::Error))))?
+            .to_string();
 
         // Extract tasks
         let tasks_json = &parsed["tasks"];
