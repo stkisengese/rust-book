@@ -1,8 +1,9 @@
 mod err;
 
 pub use err::{ParseErr, ReadErr};
-pub use json::{object, JsonValue};
-use std::{error::Error, fs};
+pub use std::{error::Error, fs::File, io::Read};
+use std::fs;
+extern crate json;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct Task {
