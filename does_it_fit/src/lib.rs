@@ -1,5 +1,24 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+pub fn area_fit(
+	x: usize,
+	y: usize,
+	objects: areas_volumes::GeometricalShapes,
+	times: usize,
+	a: usize,
+	b: usize,
+) -> bool {
+
+}
+pub fn volume_fit(
+	x: usize,
+	y: usize,
+	z: usize,
+	objects: areas_volumes::GeometricalVolumes,
+	times: usize,
+	a: usize,
+	b: usize,
+	c: usize,
+) -> bool {
+
 }
 
 #[cfg(test)]
