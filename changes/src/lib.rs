@@ -34,7 +34,7 @@ mod tests {
 
 
     let mut lights = ["living_room", "bedroom", "rest_room"].map(Light::new);
-    let result =  change_brightness(&mut lights, "living_room", 200);
+    let _result =  change_brightness(&mut lights, "living_room", 200);
     //assert_eq!(result, Some(200));
     assert_eq!(lights[0].brightness, 200);
     }

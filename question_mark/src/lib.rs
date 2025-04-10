@@ -24,7 +24,17 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        let a = One {
+            first_layer: Some(Two {
+                second_layer: Some(Three {
+                    third_layer: Some(Four {
+                        fourth_layer: Some(1000)
+                    })
+                })
+            })
+        };
+
+        let result = a.get_fourth_layer();
+        assert_eq!(result, Some(1000));
     }
 }
