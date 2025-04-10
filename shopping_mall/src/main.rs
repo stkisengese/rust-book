@@ -102,3 +102,5 @@ fn main() {
     cut_or_raise(&mut mall_la_vie);
 
     println!("{:#?}", &mall_la_vie);
+        
+}
