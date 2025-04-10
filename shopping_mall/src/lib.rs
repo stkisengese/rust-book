@@ -65,51 +65,35 @@ pub fn nbr_of_employees(mall: Mall) -> usize {
     count
 }
 
-/// Adds guards if there aren't enough (1 guard per 200 sq meters)
+/// Ensures there is at least 1 guard for every 200 square meters of floor size
+/// If not, adds guards from the provided vector to meet the requirement
 pub fn check_for_securities(mall: &mut Mall, guards: Vec<Guard>) {
-    // Calculate total floor size
-    let mut total_size = 0;
-    for floor in mall.floors.iter() {
-        for store in floor.stores.iter() {
-            total_size += store.square_meters;
-        }
-    }
-
-    // Calculate required guards (1 per 200 sq meters)
-    let required_guards = (total_size + 199) / 200; // Ceiling division
-    let current_guards = mall.guards.len() as u64;
-
-    // Add guards if needed
-    if current_guards < required_guards {
-        let guards_to_add = required_guards - current_guards;
-        
-        // Add guards from the provided vector
-        let mut guard_index = 0;
-        for _ in 0..guards_to_add {
-            if guard_index < guards.len() {
-                mall.hire_guard(guards[guard_index].clone());
-                guard_index += 1;
-            } else {
-                break; // No more guards to add
-            }
-        }
+    let mut g = guards.clone();
+    let mut count = 0_usize;
+    let s = mall
+        .floors
+        .iter()
+        .flat_map(|floor| &floor.stores)
+        .fold(0_u64, |acc, x| acc + x.square_meters);
+    while count * 200 < s as usize && g.len() > 0 {
+        count += 1;
+        mall.guards.push(g[0].clone());
+        g.remove(0);
     }
 }
 
-/// Adjusts employee salaries based on working hours
+
+/// Adjusts employee salaries: +10% if they work more than 10 hours, -10% otherwise
 pub fn cut_or_raise(mall: &mut Mall) {
     for floor in mall.floors.iter_mut() {
         for store in floor.stores.iter_mut() {
             for employee in store.employees.iter_mut() {
-                // Calculate working hours
-                let hours = employee.working_hours.1 - employee.working_hours.0;
-                
-                if hours > 10 {
-                    // Raise by 10%
-                    employee.salary *= 1.1;
+                let w_h = employee.working_hours.1 - employee.working_hours.0;
+                let percentage = employee.salary * 0.1;
+                if w_h > 10 {
+                    employee.salary += percentage
                 } else {
-                    // Cut by 10%
-                    employee.salary *= 0.9;
+                    employee.salary -= percentage
                 }
             }
         }
