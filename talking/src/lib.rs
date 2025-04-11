@@ -18,12 +18,12 @@ pub fn talking(text: &str) -> &str {
 
     let is_yelling = text.chars().all(|c| !c.is_alphabetic() || c.is_uppercase());
     let is_question = text.trim().ends_with('?');
-    let is_calm = text.trim().ends_with('!');
+    // let is_calm = text.trim().ends_with('!');
 
     match (is_yelling, is_question) {
         (true, true) => "Quiet, I am thinking!",
         (true, false) => "There is no need to yell, calm down!",
-        (false, false) if is_calm => "Sure",
+        // (false, false) if is_calm => "Sure",
         (false, true) => "Sure",
         _ => "Interesting",
     }
@@ -35,7 +35,12 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = talking("Quiet, I am thinking!");
+        let result = talking("Quiet, I am thinking?");
         assert_eq!(result, "Sure");
+    }
+    #[test]
+    fn it_works2() {
+        let result = talking("something");
+        assert_eq!(result, "Interesting");
     }
 }
