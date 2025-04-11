@@ -24,7 +24,7 @@ pub fn talking(text: &str) -> &str {
         (true, true) => "Quiet, I am thinking!",
         (true, false) => "There is no need to yell, calm down!",
         // (false, false) if is_calm => "Sure",
-        (false, true) => "Sure",
+        (false, true) => "Sure.",
         _ => "Interesting",
     }
 }
