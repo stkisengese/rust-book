@@ -18,14 +18,12 @@ pub fn talking(text: &str) -> &str {
 
     let is_yelling = text.chars().all(|c| !c.is_alphabetic() || c.is_uppercase());
     let is_question = text.trim().ends_with('?');
-    if !is_yelling && !is_question && text.trim().ends_with('!'){
-        return "Sure";
-    }
-    text.trim().ends_with('!');
+    let is_calm = text.trim().ends_with('!');
 
     match (is_yelling, is_question) {
         (true, true) => "Quiet, I am thinking!",
         (true, false) => "There is no need to yell, calm down!",
+        (false, false) if is_calm => "Sure",
         (false, true) => "Sure",
         _ => "Interesting",
     }
