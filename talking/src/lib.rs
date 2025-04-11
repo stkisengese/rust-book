@@ -16,14 +16,16 @@ pub fn talking(text: &str) -> &str {
         return "Just say something!";
     }
 
-    let is_yelling = text.chars().all(|c| !c.is_alphabetic() || c.is_uppercase());
+    let has_letters = text.chars().any(|c| c.is_alphabetic());
+    
+    // Check if all alphabetic characters are uppercase (yelling)
+    let is_yelling = has_letters && text.chars().filter(|c| c.is_alphabetic()).all(|c| c.is_uppercase());
     let is_question = text.trim().ends_with('?');
-    // let is_calm = text.trim().ends_with('!');
+    
 
     match (is_yelling, is_question) {
         (true, true) => "Quiet, I am thinking!",
         (true, false) => "There is no need to yell, calm down!",
-        // (false, false) if is_calm => "Sure",
         (false, true) => "Sure.",
         _ => "Interesting",
     }
@@ -36,7 +38,7 @@ mod tests {
     #[test]
     fn it_works() {
         let result = talking("Quiet, I am thinking?");
-        assert_eq!(result, "Sure");
+        assert_eq!(result, "Sure.");
     }
     #[test]
     fn it_works2() {
