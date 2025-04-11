@@ -1,6 +1,36 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+/// Converts a cardinal number to its ordinal form.
+///
+/// # Examples:
+/// - 1 -> "1st"
+/// - 2 -> "2nd"
+/// - 3 -> "3rd"
+/// - 4 -> "4th"
+/// - 11 -> "11th"
+/// - 21 -> "21st"
+///
+/// # Arguments
+///
+/// * `x` - A cardinal number to convert
+///
+/// # Returns
+///
+/// The ordinal representation of the number as a String
+pub fn num_to_ordinal(x: u32) -> String {
+    let suffix = if (11..=13).contains(&(x % 100)) {
+        // Special case for 11th, 12th, 13th
+        "th"
+    } else {
+        match x % 10 {
+            1 => "st",
+            2 => "nd",
+            3 => "rd",
+            _ => "th",
+        }
+    };
+
+    format!("{}{}", x, suffix)
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -8,7 +38,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        let result = num_to_ordinal(12);
+        assert_eq!(result, "12th");
     }
 }
