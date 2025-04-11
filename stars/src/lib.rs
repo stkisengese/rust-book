@@ -6,6 +6,8 @@
 
 pub fn stars(n: u32) -> String {
     "*".repeat(2u32.pow(n).try_into().unwrap())
+    // "*".repeat(2usize.pow(n))
+    // "*".repeat(1 << n)
 }
 
 #[cfg(test)]
