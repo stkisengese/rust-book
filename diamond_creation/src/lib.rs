@@ -35,8 +35,38 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = get_diamond('C');
-        assert_eq!(result, ["  A  ", " B B ", "C   C", " B B ", "  A  "]);
+    fn test_a() {
+        assert_eq!(get_diamond('A'), vec!["A"]);
+    }
+
+    #[test]
+    fn test_b() {
+        assert_eq!(get_diamond('B'), vec![" A ", "B B", " A "]);
+    }
+
+    #[test]
+    fn test_c() {
+        assert_eq!(
+            get_diamond('C'),
+            vec!["  A  ", " B B ", "C   C", " B B ", "  A  "]
+        );
+    }
+
+    #[test]
+    fn test_e() {
+        assert_eq!(
+            get_diamond('E'),
+            vec![
+                "    A    ",
+                "   B B   ",
+                "  C   C  ",
+                " D     D ",
+                "E       E",
+                " D     D ",
+                "  C   C  ",
+                "   B B   ",
+                "    A    "
+            ]
+        );
     }
 }
