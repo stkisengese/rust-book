@@ -32,6 +32,6 @@ impl WorkEnvironment {
     }
     pub fn last_worker(&self) -> Option<(String, String)> {
         self.grade.as_ref()
-            .map(|worker| (worker.role.clone(), worker.name.clone()))
+            .map(|worker| (worker.name.clone(), worker.role.clone()))
     }
 }
