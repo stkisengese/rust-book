@@ -1,14 +1,41 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+pub mod messenger;
+
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::rc::Rc;
+pub use messenger::Logger;
+pub use messenger::Tracker;
+
+pub struct Worker {
+    pub track_value: Rc<usize>,
+    pub all_messages: RefCell<Vec<String>>,
+    pub mapped_messages: RefCell<HashMap<String, String>>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl Worker {
+    // new: that initializes a Worker structure.
+    pub fn new(value: usize) -> Self {
+        Worker { 
+            track_value: Rc::new(value), 
+            all_messages: RefCell::new(Vec::new()), 
+            mapped_messages: RefCell::new(HashMap::new())
+         }
+    }    
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl Logger for Worker {
+    fn warning(&self, msg: &str) {
+        self.all_messages.borrow_mut().push(msg.to_string());
+        self.mapped_messages.borrow_mut().insert("Warning".to_string(), msg.to_string());
+    }
+
+    fn info(&self, msg: &str) {
+        self.all_messages.borrow_mut().push(msg.to_string());
+        self.mapped_messages.borrow_mut().insert("Info".to_string(), msg.to_string());
+    }
+
+    fn error(&self, msg: &str) {
+        self.all_messages.borrow_mut().push(msg.to_string());
+        self.mapped_messages.borrow_mut().insert("Error".to_string(), msg.to_string());
     }
 }
