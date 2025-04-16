@@ -27,10 +27,10 @@ impl<'a> Tracker<'a> {
         let percentage = count * 100 / self.max;
 
         if percentage >= 100 {
-            self.logger.error(&format!("you are over your quota!"));
+            self.logger.error(&format!("Error: you are over your quota!"));
         } else if percentage >= 70 {
             self.logger.warning(&format!(
-                "you have used up over {}% of your quota! Proceeds with precaution",
+                "Warning: you have used up over {}% of your quota! Proceeds with precaution",
                 percentage
             ));
         }
@@ -41,7 +41,7 @@ impl<'a> Tracker<'a> {
         let count = Rc::strong_count(value);
         let percentage = count * 100 / self.max;
         self.logger.info(&format!(
-            "you are using up to {}% of your quota",
+            "Info: you are using up to {}% of your quota",
             percentage
         ))
     }
