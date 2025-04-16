@@ -25,20 +25,20 @@ impl Worker {
 
 impl Logger for Worker {
     fn warning(&self, msg: &str) {
-        let full_msg = format!("Warning: {}", msg);
-        self.all_messages.borrow_mut().push(full_msg.to_string());
+        // let full_msg = format!("Warning: {}", msg);
+        self.all_messages.borrow_mut().push(msg.to_string());
         self.mapped_messages.borrow_mut().insert("Warning".to_string(), msg.to_string());
     }
 
     fn info(&self, msg: &str) {
-        let full_msg = format!("Info: {}", msg);
-        self.all_messages.borrow_mut().push(full_msg.to_string());
+        // let full_msg = format!("Info: {}", msg);
+        self.all_messages.borrow_mut().push(msg.to_string());
         self.mapped_messages.borrow_mut().insert("Info".to_string(), msg.to_string());
     }
 
     fn error(&self, msg: &str) {
-        let full_msg = format!("Error: {}", msg);
-        self.all_messages.borrow_mut().push(full_msg.to_string());
+        // let full_msg = format!("Error: {}", msg);
+        self.all_messages.borrow_mut().push(msg.to_string());
         self.mapped_messages.borrow_mut().insert("Error".to_string(), msg.to_string());
     }
 }
