@@ -20,14 +20,3 @@ pub fn how_many_references(ref_list: &Rc<String>) -> usize {
     Rc::strong_count(ref_list)
 }
 
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
