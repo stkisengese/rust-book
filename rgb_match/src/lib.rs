@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+// use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Color {
@@ -9,7 +9,7 @@ pub struct Color {
 }
 
 impl Color {
-    pub fn swap(mut self, first: u8, second: u8) -> Color {
+    pub fn swap(self, first: u8, second: u8) -> Color {
         match (first, second) {
             (f, s) if f == self.r && s == self.g => Color { r: s, g: f, ..self },
             (f, s) if f == self.r && s == self.b => Color { r: s, b: f, ..self },
