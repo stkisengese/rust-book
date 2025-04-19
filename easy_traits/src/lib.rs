@@ -18,7 +18,7 @@ impl AppendStr for StringValue {
     }
 
     fn append_number(&mut self, nb_to_append: f64) -> Self {
-        self.value.push_str(&nb_to_append.abs().to_string());
+        self.value.push_str(&nb_to_append.to_string());
         self.clone()
     }
 
