@@ -47,6 +47,6 @@ impl fmt::Display for Player {
         writeln!(f, "{}", self.name)?;
         writeln!(f, "Strength: {}, Score: {}, Money: {}",
             self.strength, self.score, self.money)?;
-        writeln!(f, "Weapons: {:?}", self.weapons)
+        write!(f, "Weapons: {:?}", self.weapons)
     }
 }
