@@ -7,15 +7,15 @@ pub enum Antigen {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-enum RhFactor {
+pub enum RhFactor {
 	Positive,
 	Negative,
 }
 
 #[derive(PartialEq, Eq, PartialOrd)]
 pub struct BloodType {
-	antigen: Antigen,
-	rh_factor: RhFactor,
+	pub antigen: Antigen,
+	pub rh_factor: RhFactor,
 }
 
 use std::cmp::{Ord, Ordering};
