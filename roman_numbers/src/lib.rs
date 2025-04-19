@@ -66,6 +66,7 @@ impl From<u32> for RomanNumber {
         RomanNumber(digits)
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
