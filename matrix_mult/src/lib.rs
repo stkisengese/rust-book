@@ -1,14 +1,51 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use std::ops::Mul;
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Matrix<T>(pub Vec<Vec<T>>);
+
+impl<T> Matrix<T> {
+    pub fn number_of_cols(&self) -> usize {
+        if self.0.is_empty() {
+            0
+        } else {
+            self.0[0].len()
+        }
+    }
+
+    pub fn number_of_rows(&self) -> usize {
+        self.0.len()
+    }
+
+    pub fn row(&self, n: usize) -> Vec<T> where T: Clone {
+        self.0[n].clone()
+    }
+
+    pub fn col(&self, n: usize) -> Vec<T> where T: Clone {
+        self.0.iter().map(|row| row[n].clone()).collect()
+    }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl<T> Mul for Matrix<T> where T: Clone + std::ops::Mul<Output = T> + std::iter::Sum<T> {
+    type Output = Option<Matrix<T>>;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn mul(self, other: Matrix<T>) -> Option<Matrix<T>> {
+        if self.number_of_cols() != other.number_of_rows() {
+            return None;
+        }
+
+        let mut result = Vec::new();
+        for i in 0..self.number_of_rows() {
+            let mut new_row = Vec::new();
+            for j in 0..other.number_of_cols() {
+                let sum = self.row(i)
+                    .iter()
+                    .zip(other.col(j).iter())
+                    .map(|(a, b)| a.clone() * b.clone())
+                    .sum();
+                new_row.push(sum);
+            }
+            result.push(new_row);
+        }
+        Some(Matrix(result))
     }
 }
