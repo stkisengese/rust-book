@@ -44,19 +44,21 @@ impl Event<'_> {
 				position: Position::Bottom,
 				content: text.to_string(),
 			},
-			Event::Registration(duration) => {
-				let h = duration.num_hours();
-				let min = duration.num_minutes() % 60;
-				let sec = duration.num_seconds() % 60;
-				let content = format!("You have {}H:{}M:{}S left before the registration ends", h, min, sec);
-
-				Notification {
-					size: 30,
-					color: (255, 2, 22),
-					position: Position::Top,
-					content,
-				}
-			},
+			Registration(duration) => {
+                // Convert duration to hours, minutes, seconds
+                let total_seconds = duration.num_seconds();
+                let hours = total_seconds / 3600;
+                let minutes = (total_seconds % 3600) / 60;
+                let seconds = total_seconds % 60;
+                
+                Notification {
+                    size: 30,
+                    color: (255, 2, 22),
+                    position: Position::Top,
+                    content: format!("You have {}H:{}M:{}S left before the registration ends", 
+                        hours, minutes, seconds),
+                }
+            },
 			Event::Appointment(text) => Notification {
 				size: 100,
 				color: (200, 200, 3),
