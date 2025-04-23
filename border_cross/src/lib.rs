@@ -20,7 +20,7 @@ pub trait Vehicle {
 	fn year(&self) -> u32;
 }
 
-impl Vehicle for Truck<'a> {
+impl<'a> Vehicle for Truck<'a> {
     fn model(&self) -> &str {
         self.model
     }
@@ -29,7 +29,7 @@ impl Vehicle for Truck<'a> {
     }
 }
 
-impl Vehicle for Car<'a> {
+impl<'a> Vehicle for Car<'a> {
     fn model(&self) -> &str {
         self.model
     }
@@ -38,7 +38,7 @@ impl Vehicle for Car<'a> {
     }
 }
 
-fn all_models(list: Vec<&Vehicle>) -> Vec<&str> {
+fn all_models(list: Vec<&dyn Vehicle>) -> Vec<&str> {
     list.iter().map(|v| v.model()).collect()
 }
 
@@ -49,22 +49,22 @@ mod tests {
 
     #[test]
     fn boarder_cross_test() {
-        let vehicles = vec![
-            &Car {
-                plate_nbr: "A3D5C7",
-                model: "Model 3",
-                horse_power: 325,
-                year: 2010,
-            },
-            &Truck {
-                plate_nbr: "V3D5CT",
-                model: "Ranger",
-                horse_power: 325,
-                year: 2010,
-                load_tons: 40,
-            },
-        ];
-        let result = all_models(vehicles);
-        assert_eq!(result, ["Model 3", "Ranger"]);
+        let car = Car {
+            plate_nbr: "A3D5C7",
+            model: "Model 3",
+            horse_power: 325,
+            year: 2010,
+        };
+    
+        let truck = Truck {
+            plate_nbr: "V3D5CT",
+            model: "Ranger",
+            horse_power: 325,
+            year: 2010,
+            load_tons: 40,
+        };
+    
+        let vehicles: Vec<&dyn Vehicle> = vec![&car, &truck];
+        assert_eq!(all_models(vehicles), ["Model 3", "Ranger"]);
     }
 }
