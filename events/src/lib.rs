@@ -62,7 +62,7 @@ impl Event<'_> {
 			Event::Appointment(text) => Notification {
 				size: 100,
 				color: (200, 200, 3),
-				position: Position::Top,
+				position: Position::Center,
 				content: text.to_string(),
 			},
 			Event::Holiday => Notification {
