@@ -31,25 +31,25 @@ impl Cart {
         let mut prices: Vec<f32> = self.items.iter().map(|(_, price)| *price).collect();
         prices.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-        // Apply promotion: for every 3 items, the cheapest is free
-        let promotion_groups = prices.len() / 3;
-        let mut total_discount = 0.0;
-        
-        for i in 0..promotion_groups {
-            total_discount += prices[i * 3]; // The cheapest in each group of 3
-        }
+        // Calculate how many free items we get (1 free per 3 items)
+        let free_items = prices.len() / 3;
+        let total_discount: f32 = prices.iter().take(free_items).sum();
+        let total_after_discount = prices.iter().sum::<f32>() - total_discount;
 
-        let total_price = prices.iter().sum::<f32>() - total_discount;
-        let original_total = prices.iter().sum::<f32>();
-        let discount_ratio = total_price / original_total;
+        // Calculate adjustment ratio
+        let original_total: f32 = prices.iter().sum();
+        let ratio = total_after_discount / original_total;
 
-        // Apply discount proportionally to all items
+        // Apply ratio to each item and round to 2 decimal places
         self.receipt = prices.iter()
-            .map(|price| (price * discount_ratio * 100.0).round() / 100.0)
+            .map(|&price| {
+                let adjusted = price * ratio;
+                (adjusted * 100.0).round() / 100.0
+            })
             .collect();
 
         self.receipt.clone()
-    } 
+    }
 }
 
 
