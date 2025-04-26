@@ -1,26 +1,30 @@
 #[derive(Copy, Clone)]
 pub struct Collatz {
-    pub v: u64,
+    current: u64,
 }
 
 impl Iterator for Collatz {
     type Item = u64;
-    fn next(&mut self) -> Option<<Self as Iterator>::Item> { 
-        if self.v == 1 || self.v == 0 {
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current == 0 || self.current == 1 {
             return None;
         }
-        if self.v % 2 == 0 {
-            self.v /= 2;
+        
+        let val = self.current;
+        self.current = if val % 2 == 0 {
+            val / 2
         } else {
-            self.v = 3 * self.v + 1;
-        }
-        Some(self.v)
+            val * 3 + 1
+        };
+        
+        Some(val)
     }
 }
 
 impl Collatz {
-	pub fn new(n: u64) -> Self {
-        Collatz { v: n }
+    pub fn new(n: u64) -> Self {
+        Collatz { current: n }
     }
 }
 
@@ -37,7 +41,7 @@ mod tests {
     fn test_collatz() {
         assert_eq!(collatz(12), 9);
         assert_eq!(collatz(0), 0);
-        assert_eq!(collatz(1), 0);
+        assert_eq!(collatz(16), 4);
         assert_eq!(collatz(4), 2);
         assert_eq!(collatz(5), 5);
         assert_eq!(collatz(6), 8);
