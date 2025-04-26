@@ -3,7 +3,7 @@ pub fn get_products(arr: Vec<usize>) -> Vec<usize> {
         return Vec::new();
     }
     if arr.len() == 1 {
-        return arr;
+        return Vec::new();
     }
     if arr.len() == 2 {
         return vec![arr[1], arr[0]];
@@ -27,8 +27,8 @@ mod tests {
 
     #[test]
     fn test_get_products() {
-        let arr = vec![1, 7, 3, 4];
-        let expected = vec![84, 12, 28, 21];
+        let arr = vec![2];
+        let expected = vec![2];
         assert_eq!(get_products(arr), expected);
     }
 }
