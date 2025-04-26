@@ -1,30 +1,30 @@
 #[derive(Copy, Clone)]
 pub struct Collatz {
-    current: u64,
+    v: u64,
 }
 
 impl Iterator for Collatz {
     type Item = Collatz;
     
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current == 0 || self.current == 1 {
+        if self.v == 0 || self.v == 1 {
             return None;
         }
         
-        let val = self.current;
-        self.current = if val % 2 == 0 {
+        let val = self.v;
+        self.v = if val % 2 == 0 {
             val / 2
         } else {
             val * 3 + 1
         };
         
-        Some(Collatz { current: val })
+        Some(Collatz { v: val })
     }
 }
 
 impl Collatz {
     pub fn new(n: u64) -> Self {
-        Collatz { current: n }
+        Collatz { v: n }
     }
 }
 
