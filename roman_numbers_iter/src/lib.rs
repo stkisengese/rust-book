@@ -76,9 +76,20 @@ pub mod roman_number {
         type Item = RomanNumber;
         
         fn next(&mut self) -> Option<Self::Item> {
-            let mut next_digit = self.0.clone();
-            next_digit.push(RomanDigit::I);
-            Some(RomanNumber(next_digit))
+            let current_value = match self.0.as_slice() {
+                [RomanDigit::Nulla] => 0,
+                _ => 1,
+            };
+
+            let result = if current_value == 0 {
+                RomanNumber(vec![RomanDigit::I])
+            } else {
+                let mut next_digit = self.0.clone();
+                next_digit.push(RomanDigit::I);
+                RomanNumber(next_digit)
+            };
+
+            Some(result)
         }
     }
 }
@@ -105,8 +116,8 @@ mod tests {
 
     #[test]
     fn test_roman_number_iterator() {
-        let mut number = RomanNumber::from(15);
-        assert_eq!(number, RomanNumber(vec![X, V]));
-        assert_eq!(number.next(), Some(RomanNumber(vec![X, V, I])));
+        let mut number = RomanNumber::from(Nulla as u32);
+        assert_eq!(number, RomanNumber(vec![Nulla]));
+        assert_eq!(number.next(), Some(RomanNumber(vec![I])));
     }
 }
