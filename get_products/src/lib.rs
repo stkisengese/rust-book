@@ -1,4 +1,14 @@
 pub fn get_products(arr: Vec<usize>) -> Vec<usize> {
+    if arr.is_empty() {
+        return Vec::new();
+    }
+    if arr.len() == 1 {
+        return vec![0];
+    }
+    if arr.len() == 2 {
+        return vec![arr[1], arr[0]];
+    }
+    
     arr.iter()
        .enumerate()
        .map(|(i, _)| {
